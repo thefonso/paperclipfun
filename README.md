@@ -445,4 +445,4 @@ then from the common line run
 
 	bundle install
 	
-
+Follow along as we code this fool
