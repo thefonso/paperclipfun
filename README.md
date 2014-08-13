@@ -1,7 +1,9 @@
 #Rails 4.0.4, Mongo, Paperclip
 
-- is app will live on Heroku
-- utilize AWS
+This is a basic primer for Paperclip, this app serves TWO purposes.
+
+1. basic authentication reference
+2. Mongoid Paperclip reference
 
 specifications:
 
@@ -9,10 +11,13 @@ specifications:
 	
 	a user can upload pictures to it.
 	
-	the front end will use masonry.
-
+<!--
+the front end will use masonry.
 
 [development of this app will follow these instructions](https://github.com/thefonso/Tutorials/blob/master/mongoid_paperclip_tutorial.md)
+-->
+
+
 
 ###How to get this code running
 
@@ -430,19 +435,154 @@ now when we sign up the user gets logged in automatically...yeah
 #Limit access to pages
 
 a common thing to do is to have your app limit which pages can be viewed by the level of access per user. Let's see how to make this happen...
+
+coming soon
 -->
 
 
-# Step 1 - Paperclip
+# Adding Paperclip
 
-## Add more Gems
+## Step 1 - Add more Gems
 inside your gemfile...
 
 - gem "mongoid-paperclip", "~> 0.0.8", :require => "mongoid_paperclip"
-- gem "aws-s3", :require => "aws/s3"
 
 then from the common line run
 
 	bundle install
 	
-Follow along as we code this fool
+
+## Step 2 - mongoid.yml
+make a small modification in your mongoid.yml file to avoid raising an error when we do a find on our database with no records...it's a pesky thing...we can turn this back on after we have users in our app.
+
+	raise_not_found_error: false
+
+## Step 3 - Follow along as we code this fool
+
+###Model(s)
+
+Let's create a photo model...
+
+**models/photo.rb**
+
+	class Photo
+		include Mongoid::Document
+		include Mongoid::Paperclip
+	
+		field :date, type: DateTime
+	
+		belongs_to :user
+		has_mongoid_attached_file :image, 
+	   :styles => {
+	      :original => ['1920x1680>', :jpg],
+	      :small    => ['100x100#',   :jpg],
+	      :medium   => ['250x250',    :jpg],
+	      :large    => ['500x500>',   :jpg]
+	    }
+		validates_attachment_content_type :image, content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"]
+	end
+	
+**and edit model/user.rb**
+
+	class User
+	  include Mongoid::Document
+	  include ActiveModel::SecurePassword
+	
+	  has_many :photos
+	
+	  field :email, type: String
+	  field :password_digest, type: String
+	  
+	  has_secure_password
+	
+	  validates_uniqueness_of :email
+	end
+	
+
+
+##view
+in our views/users/**index.html.erb**
+
+	<p>I'm a place holder page. I'm located in <%= users_path %> /index.html.erb </p>
+	<% if current_user != nil %>
+		<% @users.each do |u| %>
+			<div class="user_box"><h1><%= u.email %></h1>
+				<% u.photos.each do |p| %>
+					<%= image_tag p.image.url(:original) %><br />
+				<% end %>
+			</div>
+		<% end %>
+	<% end %>
+
+
+##controller
+Let's create a **photos_controller.rb**
+
+	class PhotosController < ApplicationController
+	  def index
+	  	@photos = Photo.all
+	  end
+	  def new
+	  	@photo =Photo.new
+	  end
+	  def create
+	  	# Find our parent decision that we should attach to
+	    @photo = current_user.photos.new(photo_params)
+	    @photo.date ||= DateTime.now
+	    # Attach this criterion to a decision
+	    if @photo.save
+	      redirect_to users_path
+	    else
+	      render 'new'
+	    end
+	  end
+	
+	  def show
+	  	
+	  end
+	
+	  def photo_params
+	    params.require(:photo).permit(:image)
+	  end
+	end
+
+And that's it!
+
+```
+signup
+http://localhost:3000/
+
+add photos
+http://localhost:3000/photos/new
+
+see all your users
+http://localhost:3000/users
+```
+
+#play
+
+##view
+in our views/users/**index.html.erb**
+
+remember that small medium large business we did in the photo.rb model...well that lets us save various image sizes. so now we can have our view do this
+
+	<p>I'm a place holder page. I'm located in <%= users_path %> /index.html.erb </p>
+	<% if current_user != nil %>
+		<% @users.each do |u| %>
+			<div class="user_box"><h1><%= u.email %></h1>
+				<% u.photos.each do |p| %>
+					<%= image_tag p.image.url(:original) %><br />
+					<%= image_tag p.image.url(:small) %><br />
+					<%= image_tag p.image.url(:medium) %><br />
+					<%= image_tag p.image.url(:large) %><br />
+				<% end %>
+			</div>
+		<% end %>
+	<% end %>
+	
+Reload your page now ^_^
+
+#Sources
+mongoid-paperclip - [https://github.com/meskyanichi/mongoid-paperclip](https://github.com/meskyanichi/mongoid-paperclip)
+
+paperclip - [https://github.com/thoughtbot/paperclip](https://github.com/thoughtbot/paperclip)
