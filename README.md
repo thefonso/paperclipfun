@@ -426,13 +426,14 @@ inside users_controller.rb
 	
 now when we sign up the user gets logged in automatically...yeah
 
+<!--
 #Limit access to pages
 
 a common thing to do is to have your app limit which pages can be viewed by the level of access per user. Let's see how to make this happen...
+-->
 
 
-
-# Step 1
+# Step 1 - Paperclip
 
 ## Add more Gems
 inside your gemfile...
