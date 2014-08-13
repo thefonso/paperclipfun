@@ -1,18 +1,13 @@
 #Rails 4.0.4, Mongo, Paperclip
 
-- is app will live on Heroku
-- utilize AWS
 
 specifications:
 
 	a user can login to it
 	
 	a user can upload pictures to it.
-	
-	the front end will use masonry.
 
 
-[development of this app will follow these instructions](https://github.com/thefonso/Tutorials/blob/master/mongoid_paperclip_tutorial.md)
 
 ###How to get this code running
 
