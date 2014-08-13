@@ -369,6 +369,69 @@ application.html.erb
 	
 Now when we go to localhost:3000 we can sign up, login and logout
 
+	NOTE: how in the url you have...http://localhost:3000/sessions/new
+	
+	well that looks not so pretty...why don't we make it look like this instead...http://localhost:3000/login
+	
+this is how....
+
+#Pretty routes
+
+edit the following files....
+
+routes.rb
+
+	Paperclipfun::Application.routes.draw do
+		get 'signup', to: 'users#new', as: 'signup'
+		get 'login', to: 'sessions#new', as: 'login'
+		get 'logout', to: 'sessions#destroy', as: 'logout'
+	
+		resources :sessions
+		resources :users
+	
+		root 'users#index'
+	end
+	
+application.html.erb
+
+	inside the div id=container ...
+
+	<div id="user_header">
+		<% if current_user %>
+		  Logged in as <%= current_user.email %>.
+		  <%= link_to "Log Out", logout_path %>
+		<% else %>
+		  <%= link_to "Sign Up", signup_path %> or
+		  <%= link_to "Log In", login_path %>
+		<% end %>
+	</div>
+
+NOTE: you can remove the two notices in your session_controller.rb
+
+Now we have a small bump to repair. If you notice when you sign up a new user the app does not automatically log them in...let's fix this.
+
+#Auto login during signup
+
+inside users_controller.rb
+
+	def create
+		@user = User.new(user_params)
+		if @user.save
+			session[:user_id] = @user.id
+			redirect_to root_url, notice: "Thank you for signing up!"
+		else
+			render "new"
+		end
+	end
+	
+now when we sign up the user gets logged in automatically...yeah
+
+#Limit access to pages
+
+a common thing to do is to have your app limit which pages can be viewed by the level of access per user. Let's see how to make this happen...
+
+
+
 # Step 1
 
 ## Add more Gems
