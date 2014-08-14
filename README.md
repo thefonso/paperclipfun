@@ -436,10 +436,15 @@ coming soon
 inside your gemfile...
 
 - gem "mongoid-paperclip", "~> 0.0.8", :require => "mongoid_paperclip"
-- gem "aws-s3", :require => "aws/s3"
+
 
 then from the common line run
 
 	bundle install
+
+	rake db:create
+
+	rake db:migrate
+
 	
 Follow along as we code this fool

@@ -5,7 +5,7 @@ gem 'rails', '4.0.4'
 
 # get your mongo
 gem "mongoid"
-
+gem "mongoid-paperclip", "~> 0.0.8", :require => "mongoid_paperclip"
 
 group :test, :development do
 	gem 'mongoid-rspec'
