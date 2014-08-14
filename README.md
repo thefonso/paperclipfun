@@ -442,6 +442,13 @@ coming soon
 
 # Adding Paperclip
 
+## Step 0 - Install Imagemagick
+at your cli type ...
+
+	brew install imagemagick
+
+then...
+
 ## Step 1 - Add more Gems
 inside your gemfile...
 
@@ -450,7 +457,7 @@ inside your gemfile...
 then from the common line run
 
 	bundle install
-	
+	gem
 
 ## Step 2 - mongoid.yml
 make a small modification in your mongoid.yml file to avoid raising an error when we do a find on our database with no records...it's a pesky thing...we can turn this back on after we have users in our app.
