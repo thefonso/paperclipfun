@@ -432,6 +432,14 @@ coming soon
 
 # Step 1 - Paperclip
 
+## Install Imagemagick
+
+at your cli type ...
+
+	brew install imagemagick
+
+then...
+
 ## Add more Gems
 inside your gemfile...
 
