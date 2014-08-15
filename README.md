@@ -24,3 +24,14 @@ then run
 
 	rake db:create
 	rake db:migrate
+
+```
+signup
+http://localhost:3000/
+
+add photos
+http://localhost:3000/photos/new
+
+see all your users
+http://localhost:3000/users
+```
