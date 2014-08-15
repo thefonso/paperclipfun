@@ -35,3 +35,8 @@ http://localhost:3000/photos/new
 see all your users
 http://localhost:3000/users
 ```
+
+NOTE: if you want the automatic resizing of images feature just - brew install imagemagick and uncomment the sections in 
+
+	model/photo.rb
+	views/users/index.html.erb
