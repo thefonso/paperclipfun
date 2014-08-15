@@ -21,3 +21,6 @@ You will need to switch branches. Switch to the "finished" branch like so...
 then run
 
 	bundle install
+
+	rake db:create
+	rake db:migrate
