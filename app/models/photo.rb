@@ -6,7 +6,7 @@ class Photo
 
     belongs_to :user
 
-    has_mongoid_attached_file :image 
+    has_mongoid_attached_file :image, 
    :styles => {
       :original => ['1920x1680>', :jpg],
       :small    => ['100x100#',   :jpg],
